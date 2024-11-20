@@ -1,21 +1,29 @@
 package org.studentsManager;
 
+import org.studentsManager.src.Student;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import org.studentsManager.src.StudentManagerImpl;
+
+import java.util.Objects;
 
 public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("/view.fxml"));
-        primaryStage.setTitle("FXML Example");
-        primaryStage.setScene(new Scene(root, 300, 250));
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view.fxml")));
+        primaryStage.setTitle("Students Manager");
+        primaryStage.setScene(new Scene(root, 800, 600));
         primaryStage.show();
     }
-
+    static Student student1 = new Student("Dariusz",26,0,"123");
     public static void main(String[] args) {
+        System.out.println("Student Manager launched");
+        StudentManagerImpl studentManager = new StudentManagerImpl();
+        student1.displayInfo();
         launch(args);
     }
 }

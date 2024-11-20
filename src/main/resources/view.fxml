@@ -2,7 +2,10 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.text.Text?>
 
-<StackPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.studentsManager.Controller">
-    <Button fx:id="myButton" text="Click me!" />
-</StackPane>
+<?import javafx.scene.layout.VBox?>
+<VBox xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.studentsManager.Controller" spacing="10">
+    <Text fx:id="text" text="Nothing to show" style="-fx-font-size: 20px;"/>
+    <Button fx:id="button" text="Get Student Name" onAction="#handleButtonClick"/>
+</VBox>
