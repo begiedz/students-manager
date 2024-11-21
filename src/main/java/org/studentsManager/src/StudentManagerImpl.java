@@ -4,36 +4,40 @@ import java.sql.*;
 import java.util.ArrayList;
 
 public class StudentManagerImpl implements StudentManager{
-    String url = "jdbc:mysql://localhost:3306/students-manager";
-    String username = "root";
-    String password = "";
+        private final DatabaseConnection dbConnection = new DatabaseConnection();
 
-    public StudentManagerImpl(){
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection connection = DriverManager.getConnection(url,username,password);
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("select * from students");
+    public void addStudent(Student student){
+        String query = "INSERT INTO students (name, age, grade, studentID) VALUES (?,?,?,?)";
+    }
+    public void removeStudent(String studentID){
+            String query = "DELETE FROM students WHERE studentID = ?";
+    }
+    public void updateStudent(String studentID){
+            String query = "UPDATE students SET name = ?, age = ? grade = ?, studentID = ? WHERE studentID = ?";
+    }
+
+    public ArrayList<Student> displayAllStudents() {
+        ArrayList<Student> students = new ArrayList<>();
+        String query = "SELECT * FROM students";
+
+        try (Connection connection = dbConnection.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query);
+             ResultSet resultSet = preparedStatement.executeQuery()) {
 
             while (resultSet.next()) {
-                String name = resultSet.getString(1);
-                int age = resultSet.getInt(2);
-                double grade = resultSet.getDouble(3);
-                String studentID = resultSet.getString(4);
+                String name = resultSet.getString("name");
+                int age = resultSet.getInt("age");
+                double grade = resultSet.getDouble("grade");
+                String studentID = resultSet.getString("studentID");
 
-                System.out.println("Name: " + name + " " + "age: " + age+ " " + "grade: " + grade + " " + "studentID: "+ studentID);
+                Student student = new Student(name,age,grade,studentID);
+                students.add(student);
             }
-        } catch (Exception e){
-            System.out.println(e);
+        } catch (SQLException e){
+            System.err.println("Error fetching students: " + e.getMessage());
         }
-    }
-
-    public void addStudent(Student student){};
-    public void removeStudent(String studentID){};
-    public void updateStudent(String studentID){};
-    public ArrayList<Student> displayAllStudents(){
-        ArrayList<Student> students = new ArrayList<>();
         return students;
     }
+
     public double calculateAverageGrade(){return 0;}
 }

@@ -7,7 +7,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import org.studentsManager.src.StudentManagerImpl;
 
 import java.util.Objects;
 
@@ -22,8 +21,6 @@ public class Main extends Application {
     static Student student1 = new Student("Dariusz",26,0,"123");
     public static void main(String[] args) {
         System.out.println("Student Manager launched");
-        StudentManagerImpl studentManager = new StudentManagerImpl();
-        student1.displayInfo();
         launch(args);
     }
 }

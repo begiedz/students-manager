@@ -5,7 +5,7 @@
 <?import javafx.scene.text.Text?>
 
 <?import javafx.scene.layout.VBox?>
-<VBox xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.studentsManager.Controller" spacing="10">
-    <Text fx:id="text" text="Nothing to show" style="-fx-font-size: 20px;"/>
-    <Button fx:id="button" text="Get Student Name" onAction="#handleButtonClick"/>
+<VBox xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.studentsManager.Controller" spacing="20" alignment="CENTER">
+    <Button fx:id="button" text="Get Student Name" onAction="#handleDisplayAllStudents" />
+    <Text fx:id="text" style="-fx-font-size: 20px;"/>
 </VBox>
