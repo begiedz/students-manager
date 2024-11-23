@@ -20,7 +20,7 @@ public class StudentManagerImpl implements StudentManager{
         ArrayList<Student> students = new ArrayList<>();
         String query = "SELECT * FROM students";
 
-        try (Connection connection = dbConnection.getConnection();
+        try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query);
              ResultSet resultSet = preparedStatement.executeQuery()) {
 

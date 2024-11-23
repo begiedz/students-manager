@@ -5,7 +5,44 @@
 <?import javafx.scene.text.Text?>
 
 <?import javafx.scene.layout.VBox?>
-<VBox xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.studentsManager.Controller" spacing="20" alignment="CENTER">
-    <Button fx:id="button" text="Get Student Name" onAction="#handleDisplayAllStudents" />
-    <Text fx:id="text" style="-fx-font-size: 20px;"/>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TextArea?>
+<VBox
+        xmlns:fx="http://javafx.com/fxml/1"
+        fx:controller="org.studentsManager.Controller"
+        spacing="20"
+        alignment="TOP_CENTER"
+        style="-fx-padding:20"
+>
+<!--    <Button fx:id="button" text="Get Student Name" onAction="#handleDisplayAllStudents" />-->
+<!--    <Text fx:id="text" style="-fx-font-size: 20px;"/>-->
+<!--       todo: walidacja wejścia -->
+    <VBox alignment="CENTER" spacing="5">
+        <HBox alignment="CENTER">
+            <Label text="Student ID:" prefWidth="80"/>
+            <TextField />
+        </HBox>
+        <HBox alignment="CENTER">
+            <Label text="Name:" prefWidth="80"/>
+            <TextField />
+        </HBox>
+        <HBox alignment="CENTER">
+            <Label text="Age:" prefWidth="80"/>
+            <TextField />
+        </HBox>
+        <HBox alignment="CENTER">
+            <Label text="Grade:" prefWidth="80"/>
+            <TextField />
+        </HBox>
+    </VBox>
+        <HBox spacing="10" alignment="CENTER">
+            <Button fx:id="addStudent" text="Add"  />
+            <Button fx:id="removeStudent" text="Remove"  />
+            <Button fx:id="updateStudent" text="Update"  />
+            <Button fx:id="displayAllStudents" text="Display All" onAction="#handleDisplayAllStudents" />
+            <Button fx:id="calculateAverage" text="Calculate Average"  />
+        </HBox>
+    <TextArea fx:id="output" editable="false" />
 </VBox>

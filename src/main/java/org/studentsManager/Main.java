@@ -15,7 +15,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view.fxml")));
         primaryStage.setTitle("Students Manager");
-        primaryStage.setScene(new Scene(root, 800, 600));
+        primaryStage.setScene(new Scene(root, 500, 400));
         primaryStage.show();
     }
     static Student student1 = new Student("Dariusz",26,0,"123");
