@@ -8,6 +8,20 @@ public class StudentManagerImpl implements StudentManager{
 
     public void addStudent(Student student){
         String query = "INSERT INTO students (name, age, grade, studentID) VALUES (?,?,?,?)";
+
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+
+            preparedStatement.setString(1, student.getName());
+            preparedStatement.setInt(2, student.getAge());
+            preparedStatement.setDouble(3, student.getGrade());
+            preparedStatement.setString(4, student.getStudentID());
+
+            preparedStatement.executeUpdate();
+            System.out.println("addStudent query executed");
+        } catch (SQLException e){
+            System.err.println("Error adding student: " + e.getMessage());
+        }
     }
     public void removeStudent(String studentID){
             String query = "DELETE FROM students WHERE studentID = ?";
