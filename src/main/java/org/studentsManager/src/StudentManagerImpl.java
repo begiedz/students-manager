@@ -20,11 +20,22 @@ public class StudentManagerImpl implements StudentManager{
             preparedStatement.executeUpdate();
             System.out.println("addStudent query executed");
         } catch (SQLException e){
-            System.err.println("Error adding student: " + e.getMessage());
+            System.err.println("Error while adding student: " + e.getMessage());
         }
     }
     public void removeStudent(String studentID){
             String query = "DELETE FROM students WHERE studentID = ?";
+
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+
+            preparedStatement.setString(1, studentID);
+
+            preparedStatement.executeUpdate();
+            System.out.println("removeStudent query executed");
+        } catch (SQLException e){
+            System.err.println("Error while removing student: " + e.getMessage());
+        }
     }
     public void updateStudent(String studentID){
             String query = "UPDATE students SET name = ?, age = ? grade = ?, studentID = ? WHERE studentID = ?";

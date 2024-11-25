@@ -37,12 +37,28 @@ public class Controller {
             Student newStudent = new Student(name, age, grade, studentId);
             studentManager.addStudent(newStudent);
 
-            output.setText("Student addes succesfully: " + newStudent.getName());
+            output.setText("Student added succesfully: " + newStudent.getName() + " " + newStudent.getStudentID());
         } catch (NumberFormatException e) {
             output.setText("Error: Age must be an number and grade must be a number or decimal.");
         }
     }
-    @FXML private void handleRemoveStudent(){}
+    @FXML private void handleRemoveStudent(){
+        String studentId = studentIdField.getText();
+
+        if (studentId.isEmpty()){
+            output.setText("Student ID not provided to remove specific student");
+            return;
+        }
+
+        try{
+            studentManager.removeStudent(studentId);
+            output.setText("Student with ID: " + studentId + " removed succesfully.");
+        }catch(Exception e){
+            output.setText(e.getMessage());
+        }
+
+
+    }
     @FXML private void handleUpdateStudent(){}
     @FXML private void handleCalculateAverage(){
         List<Student> students = studentManager.displayAllStudents();
