@@ -5,32 +5,36 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
 import java.util.List;
-
+// Klasa kontrolera obsługująca logikę działania aplikacji oraz interakcję z użytkownikiem.
 public class Controller {
-
     private final StudentManagerImpl studentManager = new StudentManagerImpl();
 
+    // Komponenty GUI
     @FXML private TextArea output;
     @FXML private TextField studentIdField;
     @FXML private TextField studentNameField;
     @FXML private TextField studentAgeField;
     @FXML private TextField studentGradeField;
-
+    // Dodaje nowego studenta na podstawie danych wprowadzonych przez użytkownika.
     @FXML private void handleAddStudent() {
         String studentId = studentIdField.getText();
         String name = studentNameField.getText();
         String ageText = studentAgeField.getText();
         String gradeText = studentGradeField.getText();
 
+        // Sprawdzenie, czy wszystkie pola są wypełnione
         if (studentId.isEmpty() || name.isEmpty() || ageText.isEmpty() || gradeText.isEmpty()) {
             output.setText("Error: All fields must be filled out.");
             return;
         }
 
         try {
+
+            // Parsowanie danych wejściowych
             int age = Integer.parseInt(ageText);
             double grade = Double.parseDouble(gradeText);
 
+            // Utworzenie nowego studenta i dodanie go do bazy
             Student newStudent = new Student(name, age, grade, studentId);
             studentManager.addStudent(newStudent);
 
@@ -39,6 +43,8 @@ public class Controller {
             output.setText("Error: Age must be an number and grade must be a number or decimal.");
         }
     }
+
+    // Usuwa studenta na podstawie podanego ID.
     @FXML private void handleRemoveStudent(){
         String studentId = studentIdField.getText();
 
@@ -54,6 +60,7 @@ public class Controller {
             output.setText(e.getMessage());
         }
     }
+    // Aktualizuje dane istniejącego studenta na podstawie wprowadzonych danych.
     @FXML private void handleUpdateStudent(){
         String studentId = studentIdField.getText();
         String name = studentNameField.getText();
@@ -68,6 +75,7 @@ public class Controller {
             return;
         }
         try{
+            // Sprawdzenie, które pola są wypełnione, aby tylko te dane aktualizować
             if(name.isEmpty()){
                 name = null;
             }
@@ -86,6 +94,7 @@ public class Controller {
             output.setText(e.getMessage());
         }
     }
+    // Oblicza średnią ocen wszystkich studentów i wyświetla ją w polu tekstowym
     @FXML private void handleCalculateAverage() throws Exception {
        Double average = studentManager.calculateAverageGrade();
        if (average == 0){
@@ -94,6 +103,7 @@ public class Controller {
         output.setText("Average grade for all students: " + average);
 
     }
+    // Wyświetla dane wszystkich studentów w bazie
     @FXML private void handleDisplayAllStudents(){
         List<Student> students = studentManager.displayAllStudents();
 
@@ -103,9 +113,11 @@ public class Controller {
                 return;
             }
 
+            // Tworzenie tekstu zawierającego informacje o wszystkich studentach
             StringBuilder allStudentsText = new StringBuilder();
             for (Student student : students) {
-                allStudentsText.append("Name: ")
+                allStudentsText
+                        .append("Name: ")
                         .append(student.getName())
                         .append(", Age: ")
                         .append(student.getAge())
@@ -120,8 +132,5 @@ public class Controller {
         }catch(Exception e){
             output.setText(e.getMessage());
         }
-
     }
-
-
 }

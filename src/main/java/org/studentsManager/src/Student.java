@@ -6,13 +6,14 @@ public class Student {
     private Double grade;
     private String studentID;
 
+    // Konsturktor
     public Student(String name, Integer age, Double grade, String studentID ){
         this.name = name;
         this. age = age;
         this.grade = grade;
         this.studentID = studentID;
     }
-    // getters and setters
+    // Gettery i settery odpowiadające za dostęp do danych
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
 
