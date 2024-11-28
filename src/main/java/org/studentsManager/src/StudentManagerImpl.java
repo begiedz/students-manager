@@ -100,5 +100,20 @@ public class StudentManagerImpl implements StudentManager{
         return students;
     }
 
-    public double calculateAverageGrade(){return 0;}
+    public double calculateAverageGrade() {
+        List<Student> students = displayAllStudents();
+        double averageGrade = 0.0;
+        double totalAmount = 0.0;
+
+        if (students.isEmpty()){
+            return 0;
+        }
+
+        for (Student student : students) {
+            totalAmount += student.getGrade();
+        }
+
+        averageGrade = totalAmount / students.size();
+        return averageGrade;
+    }
 }

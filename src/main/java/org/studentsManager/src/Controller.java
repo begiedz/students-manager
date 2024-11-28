@@ -86,18 +86,13 @@ public class Controller {
             output.setText(e.getMessage());
         }
     }
-    @FXML private void handleCalculateAverage(){
-        List<Student> students = studentManager.displayAllStudents();
-        double averageGrade = 0.0;
-        double totalAmount = 0.0;
-try{
-        for (Student student : students){
-            totalAmount += student.getGrade();
-        }
+    @FXML private void handleCalculateAverage() throws Exception {
+       Double average = studentManager.calculateAverageGrade();
+       if (average == 0){
+           output.setText("No average grade to show.");
+       }
+        output.setText("Average grade for all students: " + average);
 
-        averageGrade = totalAmount / students.size();
-        output.setText("Average grade of all students: " + averageGrade);
-}catch(Exception e){System.err.println(e.getMessage());}
     }
     @FXML private void handleDisplayAllStudents(){
         List<Student> students = studentManager.displayAllStudents();
