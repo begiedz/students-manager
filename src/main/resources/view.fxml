@@ -9,7 +9,7 @@
 
 <VBox
         xmlns:fx="http://javafx.com/fxml/1"
-        fx:controller="org.studentsManager.Controller"
+        fx:controller="org.studentsManager.src.Controller"
         spacing="20"
         alignment="TOP_CENTER"
         style="-fx-padding:20"
@@ -34,11 +34,11 @@
         </HBox>
     </VBox>
         <HBox alignment="CENTER" spacing="10">
-            <Button fx:id="addStudent" text="Add" onAction="#handleAddStudent"  />
-            <Button fx:id="removeStudent" text="Remove" onAction="#handleRemoveStudent"  />
-            <Button fx:id="updateStudent" text="Update"  />
-            <Button fx:id="displayAllStudents" text="Display All" onAction="#handleDisplayAllStudents" />
-            <Button fx:id="calculateAverage" text="Calculate Average" onAction="#handleCalculateAverage" />
+            <Button text="Add" onAction="#handleAddStudent"  />
+            <Button text="Remove" onAction="#handleRemoveStudent"  />
+            <Button text="Update"  onAction="#handleUpdateStudent"/>
+            <Button text="Display All" onAction="#handleDisplayAllStudents" />
+            <Button text="Calculate Average" onAction="#handleCalculateAverage" />
         </HBox>
     <TextArea fx:id="output" editable="false" />
 </VBox>

@@ -1,11 +1,8 @@
-package org.studentsManager;
+package org.studentsManager.src;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-
-import org.studentsManager.src.Student;
-import org.studentsManager.src.StudentManagerImpl;
 
 import java.util.List;
 
@@ -56,10 +53,39 @@ public class Controller {
         }catch(Exception e){
             output.setText(e.getMessage());
         }
-
-
     }
-    @FXML private void handleUpdateStudent(){}
+    @FXML private void handleUpdateStudent(){
+        String studentId = studentIdField.getText();
+        String name = studentNameField.getText();
+        String ageText = studentAgeField.getText();
+        String gradeText = studentGradeField.getText();
+
+        Integer age = null;
+        Double grade = null;
+
+        if (studentId.isEmpty()){
+            output.setText("Student ID not provided to update specific student");
+            return;
+        }
+        try{
+            if(name.isEmpty()){
+                name = null;
+            }
+            if (!ageText.isEmpty()) {
+                age = Integer.parseInt(ageText);
+            }
+            if (!gradeText.isEmpty()) {
+                grade = Double.parseDouble(gradeText);
+            }
+
+            Student newStudent = new Student(name, age, grade, studentId);
+
+            studentManager.updateStudent(newStudent);
+            output.setText("Student with ID: " + studentId + " updated succesfully.");
+        }catch(Exception e){
+            output.setText(e.getMessage());
+        }
+    }
     @FXML private void handleCalculateAverage(){
         List<Student> students = studentManager.displayAllStudents();
         double averageGrade = 0.0;

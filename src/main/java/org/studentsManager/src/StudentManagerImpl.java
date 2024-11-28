@@ -2,6 +2,7 @@ package org.studentsManager.src;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.List;
 
 public class StudentManagerImpl implements StudentManager{
         private final DatabaseConnection dbConnection = new DatabaseConnection();
@@ -37,9 +38,44 @@ public class StudentManagerImpl implements StudentManager{
             System.err.println("Error while removing student: " + e.getMessage());
         }
     }
-    public void updateStudent(String studentID){
-            String query = "UPDATE students SET name = ?, age = ? grade = ?, studentID = ? WHERE studentID = ?";
+    public void updateStudent(Student student) {
+        StringBuilder queryBuilder = new StringBuilder("UPDATE students SET ");
+        List<Object> parameters = new ArrayList<>();
+
+        if (student.getName() != null) {
+            queryBuilder.append("name = ?, ");
+            parameters.add(student.getName());
+        }
+
+        if (student.getAge() != null) {
+            queryBuilder.append("age = ?, ");
+            parameters.add(student.getAge());
+        }
+        if (student.getGrade() != null) {
+            queryBuilder.append("grade = ?, ");
+            parameters.add(student.getGrade());
+        }
+
+        // Usunięcie ostatniego przecinka i dodanie WHERE
+        queryBuilder.deleteCharAt(queryBuilder.length() - 2);
+        queryBuilder.append("WHERE studentID = ?");
+        parameters.add(student.getStudentID());
+
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(queryBuilder.toString())) {
+
+            // Ustawianie parametrów w zapytaniu
+            for (int i = 0; i < parameters.size(); i++) {
+                preparedStatement.setObject(i + 1, parameters.get(i));
+            }
+
+            preparedStatement.executeUpdate();
+            System.out.println("Student " + student.getStudentID() + " has been updated.");
+        } catch (SQLException e) {
+            System.err.println("Error while updating student: " + e.getMessage());
+        }
     }
+
 
     public ArrayList<Student> displayAllStudents() {
         ArrayList<Student> students = new ArrayList<>();
