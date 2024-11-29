@@ -91,7 +91,7 @@ Umożliwia dodawanie, usuwanie, edytowanie oraz przeglądanie studentów, a tak�
     grade DECIMAL(4,1) NOT NULL,
     studentID TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
     PRIMARY KEY (studentID)
-);
+   );
    ```  
 
 ### Konfiguracja aplikacji
