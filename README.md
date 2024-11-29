@@ -85,13 +85,13 @@ Umożliwia dodawanie, usuwanie, edytowanie oraz przeglądanie studentów, a tak�
 
 4. Utwórz tabelę `students` z następującą strukturą:
    ```sql
-   CREATE TABLE `students` (
-       `id` INT AUTO_INCREMENT PRIMARY KEY,
-       `name` VARCHAR(100) NOT NULL,
-       `age` INT NOT NULL,
-       `grade` DOUBLE NOT NULL,
-       `studentID` VARCHAR(50) UNIQUE NOT NULL
-   );
+   CREATE TABLE students (
+    name TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+    age INT(11) NOT NULL,
+    grade DECIMAL(4,1) NOT NULL,
+    studentID TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+    PRIMARY KEY (studentID)
+);
    ```  
 
 ### Konfiguracja aplikacji
