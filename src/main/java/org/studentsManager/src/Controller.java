@@ -5,7 +5,8 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
 import java.util.List;
-// Klasa kontrolera obsługująca logikę działania aplikacji oraz interakcję z użytkownikiem.
+
+// Klasa kontrolera obsługująca interakcję z użytkownikiem.
 public class Controller {
     private final StudentManagerImpl studentManager = new StudentManagerImpl();
 
@@ -15,6 +16,7 @@ public class Controller {
     @FXML private TextField studentNameField;
     @FXML private TextField studentAgeField;
     @FXML private TextField studentGradeField;
+
     // Dodaje nowego studenta na podstawie danych wprowadzonych przez użytkownika.
     @FXML private void handleAddStudent() {
         String studentId = studentIdField.getText();
@@ -29,7 +31,6 @@ public class Controller {
         }
 
         try {
-
             // Parsowanie danych wejściowych
             int age = Integer.parseInt(ageText);
             double grade = Double.parseDouble(gradeText);

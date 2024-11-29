@@ -85,6 +85,7 @@ public class StudentManagerImpl implements StudentManager{
             System.err.println("Error while updating student: " + e.getMessage());
         }
     }
+
     // Pobiera listę wszystkich studentów z bazy danych
     public ArrayList<Student> displayAllStudents() {
         ArrayList<Student> students = new ArrayList<>();
