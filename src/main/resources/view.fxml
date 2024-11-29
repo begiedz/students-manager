@@ -14,7 +14,6 @@
         alignment="TOP_CENTER"
         style="-fx-padding:20"
 >
-<!--       todo: walidacja wejścia -->
     <VBox alignment="CENTER" spacing="5">
         <HBox alignment="CENTER">
             <Label text="Student ID:" prefWidth="80"/>

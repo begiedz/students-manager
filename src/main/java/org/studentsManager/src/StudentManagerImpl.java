@@ -1,14 +1,35 @@
 package org.studentsManager.src;
 
+import org.studentsManager.src.exceptions.InvalidStudentDataException;
+import org.studentsManager.src.exceptions.StudentNotFoundException;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 // Obiekt odpowiedzialny za zarządzanie połączeniem z bazą danych i logikę aplikacji
 public class StudentManagerImpl implements StudentManager{
+
+    // Walidacja danych
+    private void validateStudent(Student student) {
+        if (student == null || student.getName() == null || student.getName().isEmpty()) {
+            throw new InvalidStudentDataException("Student name cannot be null or empty.");
+        }
+        if (student.getAge() <= 0) {
+            throw new InvalidStudentDataException("Student age must be greater than zero.");
+        }
+        if (student.getGrade() < 0 || student.getGrade() > 100) {
+            throw new InvalidStudentDataException("Grade must be between 0 and 100.");
+        }
+        if (student.getStudentID() == null || student.getStudentID().isEmpty()) {
+            throw new InvalidStudentDataException("Student ID cannot be null or empty.");
+        }
+    }
+
     // Dodaje nowego studenta do bazy danych.
     // param student - obiekt reprezentujący studenta, który ma zostać dodany.
     public void addStudent(Student student){
+        validateStudent(student);
         String query = "INSERT INTO students (name, age, grade, studentID) VALUES (?,?,?,?)";
 
         try (Connection connection = DatabaseConnection.getConnection();
@@ -30,6 +51,10 @@ public class StudentManagerImpl implements StudentManager{
 
     // Usuwa studenta z bazy danych na podstawie jego identyfikatora
     public void removeStudent(String studentID){
+        if (studentID == null || studentID.isEmpty()) {
+            throw new InvalidStudentDataException("Student ID cannot be null or empty.");
+        }
+
             String query = "DELETE FROM students WHERE studentID = ?";
 
         try (Connection connection = DatabaseConnection.getConnection();
@@ -47,6 +72,10 @@ public class StudentManagerImpl implements StudentManager{
 
     // Aktualizuje dane istniejącego studenta w bazie danych
     public void updateStudent(Student student) {
+        if (student.getStudentID() == null || student.getStudentID().isEmpty()) {
+            throw new InvalidStudentDataException("Student ID is required for update.");
+        }
+
         // Budowa zapytania SQL dynamicznie na podstawie dostarczonych danych
         StringBuilder queryBuilder = new StringBuilder("UPDATE students SET ");
         List<Object> parameters = new ArrayList<>();
@@ -66,6 +95,10 @@ public class StudentManagerImpl implements StudentManager{
             parameters.add(student.getGrade());
         }
 
+        if (parameters.isEmpty()) {
+            throw new InvalidStudentDataException("No fields provided to update.");
+        }
+
         // Usunięcie ostatniego przecinka i dodanie WHERE
         queryBuilder.deleteCharAt(queryBuilder.length() - 2);
         queryBuilder.append("WHERE studentID = ?");
@@ -79,8 +112,12 @@ public class StudentManagerImpl implements StudentManager{
                 preparedStatement.setObject(i + 1, parameters.get(i));
             }
 
-            preparedStatement.executeUpdate();
+            int rowsAffected = preparedStatement.executeUpdate();
+            if (rowsAffected == 0) {
+                throw new StudentNotFoundException("No student found with ID: " + student.getStudentID());
+            }
             System.out.println("Student " + student.getStudentID() + " has been updated.");
+
         } catch (SQLException e) {
             System.err.println("Error while updating student: " + e.getMessage());
         }
@@ -114,7 +151,6 @@ public class StudentManagerImpl implements StudentManager{
 
     public double calculateAverageGrade() {
         List<Student> students = displayAllStudents();
-        double averageGrade = 0.0;
         double totalAmount = 0.0;
 
         if (students.isEmpty()){
@@ -125,7 +161,7 @@ public class StudentManagerImpl implements StudentManager{
             totalAmount += student.getGrade();
         }
 
-        // Zwranacnie obliczonej średniej
+        // Zwracanie obliczonej średniej
         return totalAmount / students.size();
     }
 }

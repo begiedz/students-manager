@@ -26,7 +26,7 @@ public class Student {
     public String getStudentID() { return studentID; }
     public void setStudentID(String studentID) { this.studentID = studentID; }
 
-    public String displayInfo() {
-        return ("Name: "+name+", "+"Age: "+age+", "+"Grade: "+grade+", "+"ID: "+studentID);
+    public void displayInfo() {
+        System.out.println("Name: "+name+", "+"Age: "+age+", "+"Grade: "+grade+", "+"ID: "+studentID);
     }
 }
