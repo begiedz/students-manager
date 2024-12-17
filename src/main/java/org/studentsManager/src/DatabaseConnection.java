@@ -1,5 +1,7 @@
 package org.studentsManager.src;
 
+import org.studentsManager.src.exceptions.DatabaseConnectionException;
+
 import java.sql.*;
 
 // Klasa obsługująca połączenie z bazą danych MySQL
@@ -24,8 +26,16 @@ public class DatabaseConnection {
         }
     }
 
-    // Tworzy i zwraca połączenie z bazą danych
-    public static Connection getConnection() throws SQLException{
-        return DriverManager.getConnection(url,username,password);
+    // Tworzy i zwraca połączenie z bazą danych wraz z wyjątkami
+    public static Connection getConnection() throws DatabaseConnectionException{
+        try{
+            Connection connection = DriverManager.getConnection(url,username,password);
+            if (connection == null || connection.isClosed()){
+                throw new DatabaseConnectionException("Failed to establish connection to the database.");
+            }
+            return connection;
+        } catch (SQLException e){
+            throw new DatabaseConnectionException(e.getMessage());
+        }
     }
 }

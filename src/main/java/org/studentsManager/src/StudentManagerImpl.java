@@ -1,6 +1,8 @@
 package org.studentsManager.src;
 
+import org.studentsManager.src.exceptions.DatabaseConnectionException;
 import org.studentsManager.src.exceptions.InvalidStudentDataException;
+import org.studentsManager.src.exceptions.NoStudentsFoundException;
 import org.studentsManager.src.exceptions.StudentNotFoundException;
 
 import java.sql.*;
@@ -10,26 +12,11 @@ import java.util.List;
 // Obiekt odpowiedzialny za zarządzanie połączeniem z bazą danych i logikę aplikacji
 public class StudentManagerImpl implements StudentManager{
 
-    // Walidacja danych
-    private void validateStudent(Student student) {
-        if (student == null || student.getName() == null || student.getName().isEmpty()) {
-            throw new InvalidStudentDataException("Student name cannot be null or empty.");
-        }
-        if (student.getAge() <= 0) {
-            throw new InvalidStudentDataException("Student age must be greater than zero.");
-        }
-        if (student.getGrade() < 0 || student.getGrade() > 100) {
-            throw new InvalidStudentDataException("Grade must be between 0 and 100.");
-        }
-        if (student.getStudentID() == null || student.getStudentID().isEmpty()) {
-            throw new InvalidStudentDataException("Student ID cannot be null or empty.");
-        }
-    }
-
     // Dodaje nowego studenta do bazy danych.
     // param student - obiekt reprezentujący studenta, który ma zostać dodany.
     public void addStudent(Student student){
-        validateStudent(student);
+        validateAddStudent(student);
+
         String query = "INSERT INTO students (name, age, grade, studentID) VALUES (?,?,?,?)";
 
         try (Connection connection = DatabaseConnection.getConnection();
@@ -44,8 +31,10 @@ public class StudentManagerImpl implements StudentManager{
             // Wykonanie zapytania
             preparedStatement.executeUpdate();
             System.out.println("addStudent query executed");
-        } catch (SQLException e){
+        } catch (SQLException e) {
             System.err.println("Error while adding student: " + e.getMessage());
+        }  catch (DatabaseConnectionException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -67,11 +56,15 @@ public class StudentManagerImpl implements StudentManager{
             System.out.println("removeStudent query executed");
         } catch (SQLException e){
             System.err.println("Error while removing student: " + e.getMessage());
+        } catch (DatabaseConnectionException e) {
+            throw new RuntimeException(e);
         }
     }
 
     // Aktualizuje dane istniejącego studenta w bazie danych
     public void updateStudent(Student student) {
+        validateUpdateStudent(student);
+
         if (student.getStudentID() == null || student.getStudentID().isEmpty()) {
             throw new InvalidStudentDataException("Student ID is required for update.");
         }
@@ -120,6 +113,8 @@ public class StudentManagerImpl implements StudentManager{
 
         } catch (SQLException e) {
             System.err.println("Error while updating student: " + e.getMessage());
+        } catch (DatabaseConnectionException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -131,20 +126,24 @@ public class StudentManagerImpl implements StudentManager{
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query);
              ResultSet resultSet = preparedStatement.executeQuery()) {
-
             // Iteracja po wynikach zapytania i tworzenie obiektów Student
             while (resultSet.next()) {
-                String name = resultSet.getString("name");
-                int age = resultSet.getInt("age");
-                double grade = resultSet.getDouble("grade");
-                String studentID = resultSet.getString("studentID");
-
-                Student student = new Student(name,age,grade,studentID);
+                Student student = new Student(
+                        resultSet.getString("name"),
+                        resultSet.getInt("age"),
+                        resultSet.getDouble("grade"),
+                        resultSet.getString("studentID")
+                );
                 // Dodanie studenta do ArrayListy
                 students.add(student);
             }
+            if(students.isEmpty()){
+                throw new NoStudentsFoundException("No students found in the database.");
+            }
         } catch (SQLException e){
             System.err.println("Error fetching students: " + e.getMessage());
+        } catch (DatabaseConnectionException e) {
+            throw new RuntimeException(e);
         }
         return students;
     }
@@ -164,4 +163,27 @@ public class StudentManagerImpl implements StudentManager{
         // Zwracanie obliczonej średniej
         return totalAmount / students.size();
     }
+
+    // Walidacja danych
+    private void validateAddStudent(Student student) {
+        if (student == null || student.getName() == null || student.getName().isEmpty()) {
+            throw new InvalidStudentDataException("Student name cannot be null or empty.");
+        }
+        if (student.getAge() <= 0) {
+            throw new InvalidStudentDataException("Student age must be greater than zero.");
+        }
+        if (student.getGrade() < 0 || student.getGrade() > 100) {
+            throw new InvalidStudentDataException("Grade must be between 0 and 100.");
+        }
+        if (student.getStudentID() == null || student.getStudentID().isEmpty()) {
+            throw new InvalidStudentDataException("Student ID cannot be null or empty.");
+        }
+    }
+
+    private void validateUpdateStudent(Student student) {
+        if (student == null || student.getStudentID() == null || student.getStudentID().isEmpty()) {
+            throw new InvalidStudentDataException("Student ID cannot be null or empty.");
+        }
+    }
+
 }
